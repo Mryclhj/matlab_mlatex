@@ -1,0 +1,24 @@
+function mlatex(s,c)
+a=get(gca);
+isOccupied=zeros(40,1,'uint8');
+for k=1:size(a.Children,1)
+    if isfield(a.Children(k).UserData,'mlatex')
+        isOccupied(k)=a.Children(k).UserData.mlatex;
+    end
+end
+b=max(isOccupied);
+switch nargin
+    case 1
+        c=double(b+1);
+    case 2
+        findk=find(isOccupied==c,1);
+        if findk
+            a.Children(findk).String=['$',latex(s),'$'];
+            return;
+        end
+end
+text(0,1.2-0.2*c,['$',latex(s),'$'],'interpreter','latex','FontSize',20,'UserData',struct('mlatex',c));
+xlim([0 inf]);
+ylim([-inf 1]);
+axis off
+end
